@@ -77,7 +77,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s", data.Service, data.Stage))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. DEPLOYMENT FINISHED, has been reported for %s , in %s. ", data.Service, data.Stage), logger)
 	}
-	if event.Type() == keptnevents.TestFinishedEventType_0_5_0_Compatible {
+	if event.Type() == keptnevents.TestsFinishedEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
