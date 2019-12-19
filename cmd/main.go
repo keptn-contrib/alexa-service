@@ -115,7 +115,7 @@ func postAlexaNotification(alexaMessage string, logger *keptnutils.Logger) {
 	url := os.Getenv("ALEXA_WEBHOOK_URL")
 	logger.Info(fmt.Sprintf("URL:>", url))
 
-	var jsonStr = []byte(`{"notification": "This is a test GO message", "accessCode": "` +
+	var jsonStr = []byte(`{"notification": "` + alexaMessage + `", "accessCode": "` +
 		os.Getenv("ALEXA_ACCESS_TOKEN") + `", "title": "CONFIGURATION CHANGED" }`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
