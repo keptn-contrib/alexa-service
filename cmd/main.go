@@ -55,9 +55,9 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 			return err
 		}
 
-		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result: %t", data.Service, data.Stage, data.EvaluationPassed))
+		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result: %s", data.Service, data.Stage, data.Result))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-			" The result of the evaluation was %t. Promoting artifact to next stage. ", data.Service, data.Stage, data.EvaluationPassed), logger)
+			" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Stage, data.Result), logger)
 	}
 	if event.Type() == keptnevents.ConfigurationChangeEventType {
 		data := &KeptnEvent{}
@@ -105,6 +105,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 	} else {
 		const errorMsg = "Received unexpected keptn event"
 		logger.Error(errorMsg)
+		logger.Error(fmt.Sprintf("Event type: %s", event.Type()))
 		return errors.New(errorMsg)
 	}
 
