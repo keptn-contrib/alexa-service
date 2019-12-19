@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: alexa-service
-        image: keptn/alexa-service:latest
+        image: keptncontrib/alexa-service:latest
         ports:
         - containerPort: 8080
         resources:
