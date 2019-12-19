@@ -30,7 +30,7 @@ type KeptnEvent struct {
 
 type EvaluationDoneEvent struct {
 	KeptnEvent
-	EvaluationPassed bool `json:"evaluationpassed"`
+	Result string `json:"Result"`
 }
 
 type ProblemEvent struct {
