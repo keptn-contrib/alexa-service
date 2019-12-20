@@ -58,7 +58,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		var msg string
 		if data.Result == "pass" {
 			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-				" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Result)
+				" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Stage, data.Result)
 		} else {
 			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
 				" The result of the evaluation was %s. The artifact will not be promoted from %s to next stage. ", data.Service, data.Stage, data.Result)
