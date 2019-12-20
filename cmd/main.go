@@ -5,16 +5,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+
 	cloudevents "github.com/cloudevents/sdk-go"
 	"github.com/cloudevents/sdk-go/pkg/cloudevents/client"
 	cloudeventshttp "github.com/cloudevents/sdk-go/pkg/cloudevents/transport/http"
 	"github.com/kelseyhightower/envconfig"
 	keptnevents "github.com/keptn/go-utils/pkg/events"
 	keptnutils "github.com/keptn/go-utils/pkg/utils"
-	"io/ioutil"
-	"log"
-	"net/http"
-	"os"
 )
 
 type envConfig struct {
@@ -57,14 +58,13 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		var msg string
 		if data.Result == "pass" {
 			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-			" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Result)
+				" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Result)
 		} else {
 			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-			" The result of the evaluation was %s. The artifact will not be promoted from %s to next stage. ", data.Service, data.Stage, data.Result)
+				" The result of the evaluation was %s. The artifact will not be promoted from %s to next stage. ", data.Service, data.Stage, data.Result)
 		}
 		go postAlexaNotification(msg, logger)
-	}
-	else if event.Type() == keptnevents.ConfigurationChangeEventType {
+	} else if event.Type() == keptnevents.ConfigurationChangeEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
@@ -72,8 +72,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		}
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGED, has been reported for %s , in %s . ", data.Service, data.Stage), logger)
-	}
-	else if event.Type() == keptnevents.DeploymentFinishedEventType {
+	} else if event.Type() == keptnevents.DeploymentFinishedEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
@@ -81,8 +80,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		}
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s", data.Service, data.Stage))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. DEPLOYMENT FINISHED, has been reported for %s , in %s. ", data.Service, data.Stage), logger)
-	}
-	else if event.Type() == keptnevents.TestsFinishedEventType {
+	} else if event.Type() == keptnevents.TestsFinishedEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
@@ -90,8 +88,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		}
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. TESTS FINISHED, has been reported for %s , in %s. ", data.Service, data.Stage), logger)
-	}
-	else if event.Type() == keptnevents.ProblemOpenEventType {
+	} else if event.Type() == keptnevents.ProblemOpenEventType {
 		data := &ProblemEvent{}
 		if err := event.DataAs(data); err != nil {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
