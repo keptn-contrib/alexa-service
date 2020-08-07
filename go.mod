@@ -1,4 +1,4 @@
-module github.com/keptn-contrib/alexa-service
+module github.com/keptn-sandbox/alexa-service
 
 go 1.13
 

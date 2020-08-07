@@ -4,7 +4,7 @@
 # https://hub.docker.com/_/golang
 FROM golang:1.12 as builder
 
-WORKDIR /go/src/github.com/keptn-contrib/alexa-service
+WORKDIR /go/src/github.com/keptn-sandbox/alexa-service
 
 ENV GO111MODULE=on
 ENV GOPROXY=https://proxy.golang.org
@@ -40,7 +40,7 @@ ARG debugBuild
 RUN if [ ! -z "$debugBuild" ]; then apk add --no-cache libc6-compat; fi
 
 # Copy the binary to the production image from the builder stage.
-COPY --from=builder /go/src/github.com/keptn-contrib/alexa-service/alexa-service /alexa-service
+COPY --from=builder /go/src/github.com/keptn-sandbox/alexa-service/alexa-service /alexa-service
 
 EXPOSE 8080
 

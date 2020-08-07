@@ -1,8 +1,8 @@
 # Alexa Service
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/keptn-contrib/alexa-service)
-[![Build Status](https://travis-ci.org/keptn-contrib/alexa-service.svg?branch=master)](https://travis-ci.org/keptn-contrib/alexa-service)
-[![Go Report Card](https://goreportcard.com/badge/github.com/keptn-contrib/alexa-service)](https://goreportcard.com/report/github.com/keptn-contrib/alexa-service)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/keptn-sandbox/alexa-service)
+[![Build Status](https://travis-ci.org/keptn-sandbox/alexa-service.svg?branch=master)](https://travis-ci.org/keptn-sandbox/alexa-service)
+[![Go Report Card](https://goreportcard.com/badge/github.com/keptn-sandbox/alexa-service)](https://goreportcard.com/report/github.com/keptn-sandbox/alexa-service)
 
 The *alexa-service* is a [Keptn](https://keptn.sh) service for sending Keptn events to Amazon Alexa.
 
@@ -41,5 +41,5 @@ You are welcome to contribute using Pull Requests against the **master** branch.
 
 # Travis-CI setup
 
-Travis is configured with CI to automatically build docker images for pull requests and commits. The  pipeline can be viewed at https://travis-ci.org/keptn-contrib/alexa-service.
+Travis is configured with CI to automatically build docker images for pull requests and commits. The  pipeline can be viewed at https://travis-ci.org/keptn-sandbox/alexa-service.
 The travis pipeline needs to be configured with the `REGISTRY_USER` and `REGISTRY_PASSWORD` variables. 
