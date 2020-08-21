@@ -11,6 +11,7 @@
 The *alexa-notification-service* is a [Keptn](https://keptn.sh) service for sending Keptn events to an Amazon Alexa. This skill is primarilly designed for demoing the capabilities of keptn. When certain keptn events are triggered a push notification will be sent to your Amazon Alexa account. You can then ask the Alexa to read your notification describing the current state. The table below describes the current supported events and the messages you should expect to receive
 
 | Keptn Event | Default State | Sample Message | Comment |
+| ------ | --------------| -------- | -------- |
 | configuration-change | Disabled | New Keptn event detected. Configuration change, has been reported for carts in staging. | This message is static with the exception of the service and stage names which are dynamically populated. |
 | deployment-finished | Enabled | New Keptn event detected. Deployment finished, has been reported for carts in staging. | This message is static with the exception of the service and stage names which are dynamically populated. |
 | tests-finished | Disabled | New Keptn event detected. Tests finished, has been reported for carts in staging | This message is static with the exception of the service and stage names which are dynamically populated. |

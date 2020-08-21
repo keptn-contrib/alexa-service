@@ -27,8 +27,10 @@ type envConfig struct {
 type KeptnEvent struct {
 	Stage   string `json:"stage,omitempty"`
 	Service string `json:"service,omitempty"`
-	Action  string `json:"canary.action,omitempty"`
-	Value   string `json:"canary.value,omitempty"`
+	Canary  struct {
+		Action string `json:"action"`
+		Value  int    `json:"value"`
+	} `json:"canary"`
 }
 
 type EvaluationDoneEvent struct {
@@ -82,7 +84,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 			return err
 		}
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
-		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGE, has been reported for %s , in %s . The action performed was %s and the value was %d", data.Service, data.Stage, data.Action, data.Value), logger)
+		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGE, has been reported for %s , in %s . The action performed was %s and the value was %d", data.Service, data.Stage, data.Canary.Action, data.Canary.Value), logger)
 	} else if event.Type() == keptnevents.DeploymentFinishedEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
