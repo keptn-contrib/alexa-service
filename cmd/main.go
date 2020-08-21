@@ -27,6 +27,8 @@ type envConfig struct {
 type KeptnEvent struct {
 	Stage   string `json:"stage,omitempty"`
 	Service string `json:"service,omitempty"`
+	Action  string `json:"canary.action,omitempty"`
+	Value   string `json:"canary.value,omitempty"`
 }
 
 type EvaluationDoneEvent struct {
@@ -37,7 +39,6 @@ type EvaluationDoneEvent struct {
 type ProblemEvent struct {
 	State          string `json:"State"`
 	ProblemID      string `json:"ProblemID"`
-	PID            string `json:"PID"`
 	ProblemTitle   string `json:"ProblemTitle"`
 	ImpactedEntity string `json:"ImpactedEntity"`
 }
@@ -57,11 +58,21 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		}
 		var msg string
 		if data.Result == "pass" {
-			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-				" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Stage, data.Result)
+			if data.Stage == "production" {
+				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
+					" The result of the evaluation was %s. The artifact will remain and it will be set to primary. ", data.Service, data.Stage, data.Result)
+			} else {
+				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
+					" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Stage, data.Result)
+			}
 		} else {
-			msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
-				" The result of the evaluation was %s. The artifact will not be promoted from %s to next stage. ", data.Service, data.Stage, data.Result)
+			if data.Stage == "production" {
+				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
+					" The result of the evaluation was %s. The artifact will be reverted to the previous build. ", data.Service, data.Stage, data.Result)
+			} else {
+				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
+					" The result of the evaluation was %s. The artifact will not be promoted from %s to next stage. ", data.Service, data.Stage, data.Result, data.Stage)
+			}
 		}
 		go postAlexaNotification(msg, logger)
 	} else if event.Type() == keptnevents.ConfigurationChangeEventType {
@@ -71,7 +82,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 			return err
 		}
 		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
-		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGED, has been reported for %s , in %s . ", data.Service, data.Stage), logger)
+		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGE, has been reported for %s , in %s . The action performed was %s and the value was %d", data.Service, data.Stage, data.Action, data.Value), logger)
 	} else if event.Type() == keptnevents.DeploymentFinishedEventType {
 		data := &KeptnEvent{}
 		if err := event.DataAs(data); err != nil {
