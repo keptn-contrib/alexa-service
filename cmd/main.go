@@ -60,7 +60,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 		}
 		var msg string
 		if data.Result == "pass" {
-			if data.Stage == "production" {
+			if data.Stage == "production" || data.Stage == "prod" {
 				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
 					" The result of the evaluation was %s. The artifact will remain and it will be set to primary. ", data.Service, data.Stage, data.Result)
 			} else {
@@ -68,7 +68,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 					" The result of the evaluation was %s. Promoting artifact to next stage. ", data.Service, data.Stage, data.Result)
 			}
 		} else {
-			if data.Stage == "production" {
+			if data.Stage == "production" || data.Stage == "prod" {
 				msg = fmt.Sprintf("New Keptn event detected. EVALUATION DONE. has been reported for %s , in %s."+
 					" The result of the evaluation was %s. The artifact will be reverted to the previous build. ", data.Service, data.Stage, data.Result)
 			} else {
