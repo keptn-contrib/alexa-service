@@ -16,7 +16,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	keptnevents "github.com/keptn/go-utils/pkg/events"
 	keptnutils "github.com/keptn/go-utils/pkg/utils"
-	keptnutillog "github.com/keptn/go-utils/pkg/lib/keptn"
+	keptnutillog "github.com/keptn/go-utils/pkg/lib"
 )
 
 type envConfig struct {
