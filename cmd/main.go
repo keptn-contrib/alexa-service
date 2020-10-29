@@ -16,7 +16,6 @@ import (
 	"github.com/kelseyhightower/envconfig"
 	keptnevents "github.com/keptn/go-utils/pkg/events"
 	keptnutils "github.com/keptn/go-utils/pkg/utils"
-	keptnutillog "github.com/keptn/go-utils/pkg/lib"
 )
 
 type envConfig struct {
@@ -51,7 +50,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 	var shkeptncontext string
 	event.Context.ExtensionAs("shkeptncontext", &shkeptncontext)
 
-	logger := keptnutillog.NewLogger(shkeptncontext, event.Context.GetID(), "alexa-service-go")
+	logger := keptnutils.NewLogger(shkeptncontext, event.Context.GetID(), "alexa-service-go")
 
 	if event.Type() == keptnevents.EvaluationDoneEventType {
 		data := &EvaluationDoneEvent{}
