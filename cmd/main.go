@@ -15,7 +15,7 @@ import (
 	cloudeventshttp "github.com/cloudevents/sdk-go/pkg/cloudevents/transport/http"
 	"github.com/kelseyhightower/envconfig"
 	keptnevents "github.com/keptn/go-utils/pkg/events"
-	keptnutils "github.com/keptn/go-utils/pkg/utils"
+	keptnutils "github.com/keptn/go-utils/pkg/lib"
 )
 
 type envConfig struct {
@@ -50,11 +50,12 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 	var shkeptncontext string
 	event.Context.ExtensionAs("shkeptncontext", &shkeptncontext)
 
-	logger := keptnutils.NewLogger(shkeptncontext, event.Context.GetID(), "alexa-service-go")
+	logger := keptnutils.NewLogger(shkeptncontext, event.Context.GetID(), "alexa-service")
 
 	if event.Type() == keptnevents.EvaluationDoneEventType {
 		data := &EvaluationDoneEvent{}
 		if err := event.DataAs(data); err != nil {
+			fmt.Println("Alasdair - Got Data Error: " + err.Error())
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
 			return err
 		}
@@ -149,6 +150,7 @@ func postAlexaNotification(alexaMessage string, logger *keptnutils.Logger) {
 	}
 	defer resp.Body.Close()
 	log.Println("Response log!")
+	fmt.Println("Alasdair - The response status was " + resp.Status())
 	log.Println(fmt.Sprintf("response Status: %s", resp.Status))
 	logger.Info(fmt.Sprintf("response Status: %s", resp.Status))
 	logger.Info(fmt.Sprintf("response Headers: %s", resp.Header))
