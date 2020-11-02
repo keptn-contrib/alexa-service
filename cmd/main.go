@@ -85,7 +85,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 			return err
 		}
 		if data.Canary.Action == "set" && data.Canary.Value == 100 {
-			logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
+			logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s", data.Service, data.Stage))
 			if data.Stage == "" {
 				go postAlexaNotification(fmt.Sprintf("New Keptn event detected. CONFIGURATION CHANGE, has been reported. A new artifact has been detected for %s. It will now be deployed into your first stage.", data.Service), logger)
 			} else {
@@ -106,7 +106,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 			logger.Error(fmt.Sprintf("Got Data Error: %s", err.Error()))
 			return err
 		}
-		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s, Result:%s", data.Service, data.Stage))
+		logger.Info(fmt.Sprintf("Using AlexaConfig: Service:%s, Stage:%s", data.Service, data.Stage))
 		go postAlexaNotification(fmt.Sprintf("New Keptn event detected. TESTS FINISHED, has been reported for %s , in %s. ", data.Service, data.Stage), logger)
 	} else if event.Type() == keptnutils.ProblemOpenEventType {
 		data := &ProblemEvent{}
@@ -136,7 +136,7 @@ func keptnHandler(ctx context.Context, event cloudevents.Event) error {
 
 func postAlexaNotification(alexaMessage string, logger *keptnutils.Logger) {
 	url := os.Getenv("ALEXA_WEBHOOK_URL")
-	logger.Info(fmt.Sprintf("URL:>", url))
+	logger.Info(fmt.Sprintf("URL: %s", url))
 
 	var jsonStr = []byte(`{"notification": "` + alexaMessage + `", "accessCode": "` +
 		os.Getenv("ALEXA_ACCESS_TOKEN") + `", "title": "CONFIGURATION CHANGED" }`)
@@ -150,7 +150,7 @@ func postAlexaNotification(alexaMessage string, logger *keptnutils.Logger) {
 	}
 	defer resp.Body.Close()
 	log.Println("Response log!")
-	fmt.Println("Alasdair - The response status was " + resp.Status())
+	fmt.Println("Alasdair - The response status was " + resp.Status)
 	log.Println(fmt.Sprintf("response Status: %s", resp.Status))
 	logger.Info(fmt.Sprintf("response Status: %s", resp.Status))
 	logger.Info(fmt.Sprintf("response Headers: %s", resp.Header))
